@@ -1,4 +1,4 @@
-package xyz.teamgravity.todolist
+package xyz.teamgravity.todolist.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
