@@ -9,7 +9,7 @@ import xyz.teamgravity.todolist.model.TaskModel
 import javax.inject.Inject
 import javax.inject.Provider
 
-class DataCallback @Inject constructor(
+class TaskCallback @Inject constructor(
     private val database: Provider<MyDatabase>,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) : RoomDatabase.Callback() {

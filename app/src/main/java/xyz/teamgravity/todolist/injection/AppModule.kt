@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import xyz.teamgravity.todolist.helper.constants.TaskDatabase
-import xyz.teamgravity.todolist.viewmodel.DataCallback
+import xyz.teamgravity.todolist.viewmodel.TaskCallback
 import xyz.teamgravity.todolist.viewmodel.MyDatabase
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -20,7 +20,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(app: Application, callback: DataCallback) =
+    fun provideDatabase(app: Application, callback: TaskCallback) =
         Room.databaseBuilder(app, MyDatabase::class.java, TaskDatabase.DATABASE_NAME)
             .addMigrations()
             .addCallback(callback)

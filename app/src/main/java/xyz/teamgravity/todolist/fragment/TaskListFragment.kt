@@ -5,12 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import xyz.teamgravity.todolist.databinding.FragmentTaskListBinding
+import xyz.teamgravity.todolist.viewmodel.TaskViewModel
 
-class TaskListFragment: Fragment() {
+@AndroidEntryPoint
+class TaskListFragment : Fragment() {
 
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel by viewModels<TaskViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
