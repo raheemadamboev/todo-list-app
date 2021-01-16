@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import xyz.teamgravity.todolist.databinding.FragmentTaskListBinding
+import xyz.teamgravity.todolist.helper.adapter.TaskAdapter
 import xyz.teamgravity.todolist.viewmodel.TaskViewModel
 
 @AndroidEntryPoint
@@ -26,6 +27,23 @@ class TaskListFragment : Fragment() {
         _binding = FragmentTaskListBinding.inflate(inflater, container, false)
 
         return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        recyclerView()
+    }
+
+    private fun recyclerView() {
+        val adapter = TaskAdapter()
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.adapter = adapter
+
+        // observer data
+        viewModel.tasks.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }
 
     override fun onDestroyView() {
