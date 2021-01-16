@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import xyz.teamgravity.todolist.helper.constants.TaskDatabase
 import java.util.*
 
-@Entity(tableName = TaskDatabase.DATABASE_NAME)
+@Entity(tableName = TaskDatabase.TASK_TABLE)
 data class TaskModel(
 
     @PrimaryKey(autoGenerate = true)
