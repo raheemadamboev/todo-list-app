@@ -5,16 +5,20 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import xyz.teamgravity.todolist.R
 import xyz.teamgravity.todolist.databinding.FragmentTaskListBinding
 import xyz.teamgravity.todolist.helper.adapter.TaskAdapter
 import xyz.teamgravity.todolist.helper.extensions.onQueryTextChanged
+import xyz.teamgravity.todolist.model.TaskModel
 import xyz.teamgravity.todolist.viewmodel.TaskSort
 import xyz.teamgravity.todolist.viewmodel.TaskViewModel
 
 @AndroidEntryPoint
-class TaskListFragment : Fragment() {
+class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
 
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
@@ -39,7 +43,7 @@ class TaskListFragment : Fragment() {
     }
 
     private fun recyclerView() {
-        val adapter = TaskAdapter()
+        val adapter = TaskAdapter(this)
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
 
@@ -59,23 +63,30 @@ class TaskListFragment : Fragment() {
         searchView.onQueryTextChanged {
             viewModel.query.value = it
         }
+
+        // update hide completed when app starts
+        viewLifecycleOwner.lifecycleScope.launch {
+            // it gets only first and cancels coroutine
+            menu.findItem(R.id.action_hide).isChecked =
+                viewModel.preferencesFlow.first().hideCompleted
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_sort_name -> {
-                viewModel.sortOrder.value = TaskSort.BY_NAME
+                viewModel.onTaskSort(TaskSort.BY_NAME)
                 true
             }
 
             R.id.action_sort_date -> {
-                viewModel.sortOrder.value = TaskSort.BY_DATE
+                viewModel.onTaskSort(TaskSort.BY_DATE)
                 true
             }
 
             R.id.action_hide -> {
                 item.isChecked = !item.isChecked
-                viewModel.hideCompleted.value = item.isChecked
+                viewModel.onHideCompleted(item.isChecked)
                 true
             }
 
@@ -86,6 +97,16 @@ class TaskListFragment : Fragment() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    // task click
+    override fun onTaskClick(task: TaskModel) {
+        viewModel.onTaskClicked(task)
+    }
+
+    // task check click
+    override fun onTaskCheck(task: TaskModel, isChecked: Boolean) {
+        viewModel.onTaskChecked(task, isChecked)
     }
 
     override fun onDestroyView() {

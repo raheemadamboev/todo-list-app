@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.teamgravity.todolist.databinding.CardTaskBinding
 import xyz.teamgravity.todolist.model.TaskModel
 
-class TaskAdapter : ListAdapter<TaskModel, TaskAdapter.TaskViewHolder>(DIFF) {
+class TaskAdapter(private val listener: OnTaskListener) : ListAdapter<TaskModel, TaskAdapter.TaskViewHolder>(DIFF) {
     companion object {
         val DIFF = object : DiffUtil.ItemCallback<TaskModel>() {
             override fun areItemsTheSame(oldItem: TaskModel, newItem: TaskModel): Boolean {
@@ -25,7 +25,21 @@ class TaskAdapter : ListAdapter<TaskModel, TaskAdapter.TaskViewHolder>(DIFF) {
     inner class TaskViewHolder(private val binding: CardTaskBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onTaskClick(getItem(position))
+                    }
+                }
 
+                taskC.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onTaskCheck(getItem(position), taskC.isChecked)
+                    }
+                }
+            }
         }
 
         fun bind(model: TaskModel) {
@@ -44,5 +58,10 @@ class TaskAdapter : ListAdapter<TaskModel, TaskAdapter.TaskViewHolder>(DIFF) {
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    interface OnTaskListener {
+        fun onTaskClick(task: TaskModel)
+        fun onTaskCheck(task: TaskModel, isChecked: Boolean)
     }
 }
