@@ -44,6 +44,7 @@ class AddEditFragment : Fragment() {
         updateUI()
         saveState()
         button()
+        events()
     }
 
     private fun updateUI() {

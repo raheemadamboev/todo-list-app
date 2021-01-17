@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.TodoList" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/pumpkin</item>
-        <item name="colorPrimaryVariant">@color/pumpkin</item>
+        <item name="colorPrimary">@color/prunus_avium</item>
+        <item name="colorPrimaryVariant">@color/prunus_avium</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/pumpkin</item>
-        <item name="colorSecondaryVariant">@color/pumpkin</item>
+        <item name="colorSecondary">@color/prunus_avium</item>
+        <item name="colorSecondaryVariant">@color/prunus_avium</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
