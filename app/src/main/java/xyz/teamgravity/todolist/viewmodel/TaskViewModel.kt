@@ -1,11 +1,9 @@
 package xyz.teamgravity.todolist.viewmodel
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -15,20 +13,21 @@ import xyz.teamgravity.todolist.model.TaskModel
 
 class TaskViewModel @ViewModelInject constructor(
     private val dao: TaskDao,
-    private val preferences: Preferences
+    private val preferences: Preferences,
+    @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
 
     // query
-    val query = MutableStateFlow("")
+    val query = state.getLiveData("searchQuery", "")
 
     // preferences flow
     val preferencesFlow = preferences.preferenceFlow
 
-    private val taskEventChannel = Channel<TaskEvent> {  }
+    private val taskEventChannel = Channel<TaskEvent> { }
     val taskEvent = taskEventChannel.receiveAsFlow()
 
     // search tasks, combine everything
-    private val taskFlow = combine(query, preferencesFlow) { query, preferencesModel ->
+    private val taskFlow = combine(query.asFlow(), preferencesFlow) { query, preferencesModel ->
         Pair(query, preferencesModel)
     }.flatMapLatest { (query, preferencesModel) ->
         dao.getTasks(query, preferencesModel.hideCompleted, preferencesModel.taskSort)
@@ -48,8 +47,8 @@ class TaskViewModel @ViewModelInject constructor(
     }
 
     // task click
-    fun onTaskClicked(task: TaskModel) {
-
+    fun onTaskClicked(task: TaskModel) = viewModelScope.launch {
+        taskEventChannel.send(TaskEvent.NavigateToAddedTaskScreen(task))
     }
 
     // task check
@@ -68,7 +67,14 @@ class TaskViewModel @ViewModelInject constructor(
         dao.insert(task)
     }
 
+    // add task button click
+    fun onAddButtonClick() = viewModelScope.launch {
+        taskEventChannel.send(TaskEvent.NavigateToAddTaskScreen)
+    }
+
     sealed class TaskEvent {
-        data class ShowUndoDeleteTaskMessage(val task: TaskModel): TaskEvent()
+        object NavigateToAddTaskScreen : TaskEvent()
+        data class NavigateToAddedTaskScreen(val task: TaskModel) : TaskEvent()
+        data class ShowUndoDeleteTaskMessage(val task: TaskModel) : TaskEvent()
     }
 }

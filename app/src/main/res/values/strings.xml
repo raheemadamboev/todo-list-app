@@ -4,10 +4,14 @@
     <!-- Task List Fragment -->
     <string name="deleted_successfully">Task deleted successfully</string>
     <string name="undo">Undo</string>
+    <string name="tasks">Tasks</string>
 
     <!-- Add Edit Fragment -->
     <string name="task_name">Task name</string>
     <string name="important_task">Important task</string>
+    <string name="created">Created</string>
+    <string name="new_task">New task</string>
+    <string name="edit_task">Edit task</string>
 
     <!-- Task list menu -->
     <string name="search">Search</string>

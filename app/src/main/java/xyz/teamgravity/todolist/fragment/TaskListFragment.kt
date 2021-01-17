@@ -6,6 +6,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 import xyz.teamgravity.todolist.R
 import xyz.teamgravity.todolist.databinding.FragmentTaskListBinding
 import xyz.teamgravity.todolist.helper.adapter.TaskAdapter
+import xyz.teamgravity.todolist.helper.extensions.exhaustive
 import xyz.teamgravity.todolist.helper.extensions.onQueryTextChanged
 import xyz.teamgravity.todolist.model.TaskModel
 import xyz.teamgravity.todolist.viewmodel.TaskSort
@@ -45,6 +47,7 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
 
         recyclerView()
         events()
+        button()
     }
 
     private fun recyclerView() {
@@ -86,8 +89,37 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
                                 viewModel.onUndoTaskDelete(event.task)
                             }.show()
                     }
-                }
+
+                    is TaskViewModel.TaskEvent.NavigateToAddTaskScreen -> {
+                        findNavController().navigate(
+                            TaskListFragmentDirections.actionTaskListFragmentToAddEditFragment(
+                                null,
+                                getString(R.string.new_task)
+                            )
+                        )
+                    }
+
+                    is TaskViewModel.TaskEvent.NavigateToAddedTaskScreen -> {
+                        findNavController().navigate(
+                            TaskListFragmentDirections.actionTaskListFragmentToAddEditFragment(
+                                event.task,
+                                getString(R.string.edit_task)
+                            )
+                        )
+                    }
+                }.exhaustive
             }
+        }
+    }
+
+    private fun button() {
+        onAdd()
+    }
+
+    // add button
+    private fun onAdd() {
+        binding.addB.setOnClickListener {
+            viewModel.onAddButtonClick()
         }
     }
 
