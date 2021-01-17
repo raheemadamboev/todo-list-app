@@ -16,13 +16,17 @@ class TaskViewModel @ViewModelInject constructor(
     private val preferences: Preferences,
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
+    companion object {
+        private const val SEARCH_QUERY = "searchQuery"
+    }
 
     // query
-    val query = state.getLiveData("searchQuery", "")
+    val query = state.getLiveData(SEARCH_QUERY, "")
 
     // preferences flow
     val preferencesFlow = preferences.preferenceFlow
 
+    // channel to send one time events
     private val taskEventChannel = Channel<TaskEvent> { }
     val taskEvent = taskEventChannel.receiveAsFlow()
 
