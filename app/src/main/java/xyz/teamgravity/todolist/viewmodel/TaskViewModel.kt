@@ -4,9 +4,11 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import xyz.teamgravity.todolist.helper.util.Preferences
 import xyz.teamgravity.todolist.model.TaskModel
@@ -19,9 +21,13 @@ class TaskViewModel @ViewModelInject constructor(
     // query
     val query = MutableStateFlow("")
 
+    // preferences flow
     val preferencesFlow = preferences.preferenceFlow
 
-    // search tasks
+    private val taskEventChannel = Channel<TaskEvent> {  }
+    val taskEvent = taskEventChannel.receiveAsFlow()
+
+    // search tasks, combine everything
     private val taskFlow = combine(query, preferencesFlow) { query, preferencesModel ->
         Pair(query, preferencesModel)
     }.flatMapLatest { (query, preferencesModel) ->
@@ -49,5 +55,20 @@ class TaskViewModel @ViewModelInject constructor(
     // task check
     fun onTaskChecked(task: TaskModel, isChecked: Boolean) = viewModelScope.launch {
         dao.update(task.copy(completed = isChecked))
+    }
+
+    // task swiped
+    fun onTaskSwiped(task: TaskModel) = viewModelScope.launch {
+        dao.delete(task)
+        taskEventChannel.send(TaskEvent.ShowUndoDeleteTaskMessage(task))
+    }
+
+    // undo task delete
+    fun onUndoTaskDelete(task: TaskModel) = viewModelScope.launch {
+        dao.insert(task)
+    }
+
+    sealed class TaskEvent {
+        data class ShowUndoDeleteTaskMessage(val task: TaskModel): TaskEvent()
     }
 }

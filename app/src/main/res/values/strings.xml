@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Todo List</string>
 
+    <!-- Task List Fragment -->
+    <string name="deleted_successfully">Task deleted successfully</string>
+    <string name="undo">Undo</string>
+
     <!-- Add Edit Fragment -->
     <string name="task_name">Task name</string>
     <string name="important_task">Important task</string>
