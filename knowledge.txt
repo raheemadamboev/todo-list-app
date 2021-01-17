@@ -1,0 +1,42 @@
+Technology:
+
+Dependency Injection Dagger Hilt
+Kotlin Coroutines
+Room
+ViewBinding
+Flow
+Channel
+StateFlow
+Process Death Handling
+Livedata
+Jetpack Navigation Component
+MVVM
+Jetpack DataStore Preferences
+Material Design
+
+Knowledge:
+
+- Check Box set minHeight and minWidth 0dp to cut unneccary margin
+- Provider<something> is lazy initiliazing, it only creates object when it is called, it usefull when one dependency needs other in order to create
+- Create application scope in application singleton module with SupervisorJob
+- Create custom Qualifier annotation to differiantie same type objects in Dagger Hilt
+- Create custom extension function and lambda
+- crossinline to block return keyword in lambda
+- LIKE '%' || :query || '%' contains method in SQLITE
+- return three values with Triple class
+- destruct some bitches with () in lambda e.g. (first, second, third) ->
+- in interface u can create method body to define which method to call in interface
+- use combine() method to combine flows in one, and u can respond to changes then with flatMapLatest() function
+- viewLifecycleOwner.lifecycleScope coroutine to make operations only in fragment required and easily can update ui
+- sealed class is beneficial for using when, compiler knows all values of sealed class when using when
+- do not expose Channel to activity or fragment, because they could put something in them, make it flow
+- channel sends only one info whereas flow and livedata could send again when config changes
+- in CheckBox use jumpDrawablesToCurrentState() to remove animation when updating ui from database to make it clean
+- use ->val <T> T.exhaustive: T get() = this to turn sealed class statement to an expression so compiler won't compile code if all branches in when took care
+- can create bundle with bundleOf()
+- can send results with setFragmentResult()
+- set windowSoftInputMode to adjustResize in order to move fab when keyboard appears
+- adding viewmodel to Dialog
+- adding dialog to navigation graph
+- creating fully responsible and robust app that can stand configuration changes and process death
+- decoupling business logic from fragment and activities
