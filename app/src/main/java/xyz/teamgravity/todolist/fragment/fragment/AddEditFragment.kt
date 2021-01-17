@@ -38,6 +38,8 @@ class AddEditFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         updateUI()
+        saveState()
+        button()
     }
 
     private fun updateUI() {
@@ -47,8 +49,12 @@ class AddEditFragment : Fragment() {
             importantC.jumpDrawablesToCurrentState()
             timestampT.visibility = if (viewModel.task == null) View.GONE else View.VISIBLE
             timestampT.text = Helper.addWithPoint(getString(R.string.created), viewModel.task?.timestamp.toString())
+        }
+    }
 
-            // save text change in savedState
+    // save text change in savedState
+    private fun saveState() {
+        binding.apply {
             taskField.addTextChangedListener {
                 viewModel.taskName = it.toString()
             }
@@ -56,29 +62,36 @@ class AddEditFragment : Fragment() {
             importantC.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.taskImportance = isChecked
             }
+        }
+    }
 
-            // save button
-            saveB.setOnClickListener {
-                viewModel.onSaveButtonClick(resources)
+    private fun button() {
+        onSave()
+    }
+
+    private fun events() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.addEditTaskEvent.collect { event ->
+                when (event) {
+                    is AddEditViewModel.AddEditTaskEvent.ShowInvalidInputEvent -> {
+                        Snackbar.make(requireView(), event.message, Snackbar.LENGTH_LONG).show()
+                    }
+
+                    is AddEditViewModel.AddEditTaskEvent.NavigateBackWithResult -> {
+                        binding.taskField.clearFocus()
+                        setFragmentResult("add_edit_request", bundleOf("message" to event.message))
+                        findNavController().popBackStack()
+                        null
+                    }
+                }.exhaustive
             }
+        }
+    }
 
-            // events
-          viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                viewModel.addEditTaskEvent.collect { event ->
-                    when (event) {
-                        is AddEditViewModel.AddEditTaskEvent.ShowInvalidInputEvent -> {
-                            Snackbar.make(requireView(), event.message, Snackbar.LENGTH_LONG).show()
-                        }
-
-                        is AddEditViewModel.AddEditTaskEvent.NavigateBackWithResult -> {
-                            taskField.clearFocus()
-                            setFragmentResult("add_edit_request", bundleOf("message" to event.message))
-                            findNavController().popBackStack()
-                            null
-                        }
-                    }.exhaustive
-                }
-            }
+    // save button
+    private fun onSave() {
+        binding.saveB.setOnClickListener {
+            viewModel.onSaveButtonClick(resources)
         }
     }
 
