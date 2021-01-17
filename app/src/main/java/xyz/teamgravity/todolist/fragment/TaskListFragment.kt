@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -48,6 +49,7 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
         recyclerView()
         events()
         button()
+        result()
     }
 
     private fun recyclerView() {
@@ -107,6 +109,10 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
                             )
                         )
                     }
+
+                    is TaskViewModel.TaskEvent.ShowAddEditResultMessage -> {
+                        Snackbar.make(requireView(), event.message, Snackbar.LENGTH_SHORT).show()
+                    }
                 }.exhaustive
             }
         }
@@ -116,11 +122,28 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
         onAdd()
     }
 
+    private fun result() {
+        setFragmentResultListener("add_edit_request") { _, bundle ->
+            val result = bundle.getString("message", "")
+            viewModel.onAddEditResult(result)
+        }
+    }
+
     // add button
     private fun onAdd() {
         binding.addB.setOnClickListener {
             viewModel.onAddButtonClick()
         }
+    }
+
+    // task click
+    override fun onTaskClick(task: TaskModel) {
+        viewModel.onTaskClicked(task)
+    }
+
+    // task check click
+    override fun onTaskCheck(task: TaskModel, isChecked: Boolean) {
+        viewModel.onTaskChecked(task, isChecked)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -167,16 +190,6 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
 
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    // task click
-    override fun onTaskClick(task: TaskModel) {
-        viewModel.onTaskClicked(task)
-    }
-
-    // task check click
-    override fun onTaskCheck(task: TaskModel, isChecked: Boolean) {
-        viewModel.onTaskChecked(task, isChecked)
     }
 
     override fun onDestroyView() {

@@ -12,6 +12,9 @@
     <string name="created">Created</string>
     <string name="new_task">New task</string>
     <string name="edit_task">Edit task</string>
+    <string name="field_error">Name cannot be empty!</string>
+    <string name="task_created">Task created</string>
+    <string name="task_updated">Task updated</string>
 
     <!-- Task list menu -->
     <string name="search">Search</string>

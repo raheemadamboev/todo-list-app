@@ -72,9 +72,15 @@ class TaskViewModel @ViewModelInject constructor(
         taskEventChannel.send(TaskEvent.NavigateToAddTaskScreen)
     }
 
+    // add edit result
+    fun onAddEditResult(message: String) = viewModelScope.launch {
+        taskEventChannel.send(TaskEvent.ShowAddEditResultMessage(message))
+    }
+
     sealed class TaskEvent {
         object NavigateToAddTaskScreen : TaskEvent()
         data class NavigateToAddedTaskScreen(val task: TaskModel) : TaskEvent()
         data class ShowUndoDeleteTaskMessage(val task: TaskModel) : TaskEvent()
+        data class ShowAddEditResultMessage(val message: String) : TaskEvent()
     }
 }

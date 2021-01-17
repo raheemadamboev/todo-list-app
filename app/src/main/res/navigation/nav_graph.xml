@@ -19,9 +19,6 @@
         android:name="xyz.teamgravity.todolist.fragment.AddEditFragment"
         android:label="{title}"
         tools:layout="@layout/fragment_add_edit">
-        <action
-            android:id="@+id/action_addEditFragment_to_taskListFragment"
-            app:destination="@id/taskListFragment" />
         <argument
             android:name="task"
             android:defaultValue="@null"
