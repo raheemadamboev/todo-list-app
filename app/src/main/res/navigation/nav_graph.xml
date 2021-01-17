@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/taskListFragment"
-        android:name="xyz.teamgravity.todolist.fragment.TaskListFragment"
+        android:name="xyz.teamgravity.todolist.fragment.fragment.TaskListFragment"
         android:label="@string/tasks"
         tools:layout="@layout/fragment_task_list">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/addEditFragment"
-        android:name="xyz.teamgravity.todolist.fragment.AddEditFragment"
+        android:name="xyz.teamgravity.todolist.fragment.fragment.AddEditFragment"
         android:label="{title}"
         tools:layout="@layout/fragment_add_edit">
         <argument
@@ -28,4 +28,8 @@
             android:name="title"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/deleteDialog"
+        android:name="xyz.teamgravity.todolist.fragment.dialog.DeleteDialog"
+        android:label="DeleteDialog" /><action android:id="@+id/action_global_deleteDialog" app:destination="@id/deleteDialog"/>
 </navigation>

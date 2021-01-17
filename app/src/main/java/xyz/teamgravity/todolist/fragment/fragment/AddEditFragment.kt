@@ -1,4 +1,4 @@
-package xyz.teamgravity.todolist.fragment
+package xyz.teamgravity.todolist.fragment.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -34,8 +34,8 @@ class AddEditFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         updateUI()
     }

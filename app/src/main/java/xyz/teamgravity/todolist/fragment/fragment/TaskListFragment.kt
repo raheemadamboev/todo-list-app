@@ -1,4 +1,4 @@
-package xyz.teamgravity.todolist.fragment
+package xyz.teamgravity.todolist.fragment.fragment
 
 import android.os.Bundle
 import android.view.*
@@ -42,8 +42,8 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
         recyclerView()
@@ -112,6 +112,10 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
 
                     is TaskViewModel.TaskEvent.ShowAddEditResultMessage -> {
                         Snackbar.make(requireView(), event.message, Snackbar.LENGTH_SHORT).show()
+                    }
+
+                    is TaskViewModel.TaskEvent.NavigateToDeleteAllCompleted -> {
+                        findNavController().navigate(TaskListFragmentDirections.actionGlobalDeleteDialog())
                     }
                 }.exhaustive
             }
@@ -184,7 +188,7 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
             }
 
             R.id.action_delete_completed -> {
-
+                viewModel.onDeleteAllCompleted()
                 true
             }
 

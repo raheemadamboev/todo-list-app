@@ -23,4 +23,10 @@
     <string name="sort_by_date">Sort by date</string>
     <string name="hide_completed">Hide completed</string>
     <string name="delete_all_completed">Delete all completed</string>
+
+    <!-- Delete Dialog -->
+    <string name="confirm_deletion">Confirm deletion</string>
+    <string name="wanna_delete_all">Do you want to delete all completed tasks?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>

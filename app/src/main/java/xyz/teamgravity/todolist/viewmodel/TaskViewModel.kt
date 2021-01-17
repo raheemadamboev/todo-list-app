@@ -77,10 +77,16 @@ class TaskViewModel @ViewModelInject constructor(
         taskEventChannel.send(TaskEvent.ShowAddEditResultMessage(message))
     }
 
+    // delete all completed menu click
+    fun onDeleteAllCompleted() = viewModelScope.launch {
+        taskEventChannel.send(TaskEvent.NavigateToDeleteAllCompleted)
+    }
+
     sealed class TaskEvent {
         object NavigateToAddTaskScreen : TaskEvent()
         data class NavigateToAddedTaskScreen(val task: TaskModel) : TaskEvent()
         data class ShowUndoDeleteTaskMessage(val task: TaskModel) : TaskEvent()
         data class ShowAddEditResultMessage(val message: String) : TaskEvent()
+        object NavigateToDeleteAllCompleted : TaskEvent()
     }
 }

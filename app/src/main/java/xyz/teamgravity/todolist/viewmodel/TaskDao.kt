@@ -28,4 +28,7 @@ interface TaskDao {
             TaskSort.BY_NAME -> getTasksSortedByName(query, hideCompleted)
             TaskSort.BY_DATE -> getTasksSortedByDate(query, hideCompleted)
         }
+
+    @Query("DELETE FROM ${TaskDatabase.TASK_TABLE} WHERE completed = 1")
+    suspend fun deleteAllCompleted()
 }
