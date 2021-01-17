@@ -10,6 +10,7 @@ import xyz.teamgravity.todolist.R
 import xyz.teamgravity.todolist.databinding.FragmentTaskListBinding
 import xyz.teamgravity.todolist.helper.adapter.TaskAdapter
 import xyz.teamgravity.todolist.helper.extensions.onQueryTextChanged
+import xyz.teamgravity.todolist.viewmodel.TaskSort
 import xyz.teamgravity.todolist.viewmodel.TaskViewModel
 
 @AndroidEntryPoint
@@ -63,17 +64,18 @@ class TaskListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_sort_name -> {
-
+                viewModel.sortOrder.value = TaskSort.BY_NAME
                 true
             }
 
             R.id.action_sort_date -> {
-
+                viewModel.sortOrder.value = TaskSort.BY_DATE
                 true
             }
 
             R.id.action_hide -> {
-
+                item.isChecked = !item.isChecked
+                viewModel.hideCompleted.value = item.isChecked
                 true
             }
 

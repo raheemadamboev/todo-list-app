@@ -3,11 +3,10 @@ package xyz.teamgravity.todolist.viewmodel
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 
-@ExperimentalCoroutinesApi
 class TaskViewModel @ViewModelInject constructor(
     private val dao: TaskDao
 ) : ViewModel() {
@@ -15,9 +14,14 @@ class TaskViewModel @ViewModelInject constructor(
     // query
     val query = MutableStateFlow("")
 
+    val sortOrder = MutableStateFlow(TaskSort.BY_DATE)
+    val hideCompleted = MutableStateFlow(false)
+
     // search tasks
-    private val taskFlow = query.flatMapLatest {
-        dao.getTasks(it)
+    private val taskFlow = combine(query, sortOrder, hideCompleted) { query, sortOrder, hideCompleted ->
+        Triple(query, sortOrder, hideCompleted)
+    }.flatMapLatest { (query, sortOrder, hideCompleted) ->
+        dao.getTasks(query, hideCompleted, sortOrder)
     }
 
     // result as a live data
