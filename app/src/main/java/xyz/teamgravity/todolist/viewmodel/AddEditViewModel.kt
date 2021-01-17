@@ -16,21 +16,27 @@ class AddEditViewModel @ViewModelInject constructor(
     @Assisted private val state: SavedStateHandle,
     private val dao: TaskDao
 ) : ViewModel() {
+    companion object {
+        private const val TASK = "task"
+        private const val TASK_NAME = "taskName"
+        private const val TASK_IMPORTANCE = "taskImportance"
+    }
 
-    val task = state.get<TaskModel>("task")
+    val task = state.get<TaskModel>(TASK)
 
-    var taskName = state.get<String>("taskName") ?: task?.name ?: ""
+    var taskName = state.get<String>(TASK_NAME) ?: task?.name ?: ""
         set(value) {
             field = value
-            state.set("taskName", value)
+            state.set(TASK_NAME, value)
         }
 
-    var taskImportance = state.get<Boolean>("taskImportance") ?: task?.important ?: false
+    var taskImportance = state.get<Boolean>(TASK_IMPORTANCE) ?: task?.important ?: false
         set(value) {
             field = value
-            state.set("taskImportance", value)
+            state.set(TASK_IMPORTANCE, value)
         }
 
+    // channel to send one time events
     private val addEditTaskEventChannel = Channel<AddEditTaskEvent> {  }
     val addEditTaskEvent = addEditTaskEventChannel.receiveAsFlow()
 
