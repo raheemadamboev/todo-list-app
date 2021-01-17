@@ -44,6 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        app:tint="@color/white"
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_check_mark"
         app:elevation="10dp" />
