@@ -49,8 +49,8 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
         setHasOptionsMenu(true)
 
         recyclerView()
-        events()
         button()
+        events()
         result()
     }
 
@@ -81,6 +81,10 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
         viewModel.tasks.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+    }
+
+    private fun button() {
+        onAdd()
     }
 
     private fun events() {
@@ -124,13 +128,9 @@ class TaskListFragment : Fragment(), TaskAdapter.OnTaskListener {
         }
     }
 
-    private fun button() {
-        onAdd()
-    }
-
     private fun result() {
-        setFragmentResultListener("add_edit_request") { _, bundle ->
-            val result = bundle.getString("message", "")
+        setFragmentResultListener(AddEditFragment.RESULT_REQUEST_KEY) { _, bundle ->
+            val result = bundle.getString(AddEditFragment.MESSAGE_EXTRA, "")
             viewModel.onAddEditResult(result)
         }
     }

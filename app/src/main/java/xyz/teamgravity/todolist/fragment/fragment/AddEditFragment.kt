@@ -22,6 +22,10 @@ import xyz.teamgravity.todolist.viewmodel.AddEditViewModel
 
 @AndroidEntryPoint
 class AddEditFragment : Fragment() {
+    companion object {
+        const val RESULT_REQUEST_KEY = "resultRequestKey"
+        const val MESSAGE_EXTRA = "messageExtra"
+    }
 
     private var _binding: FragmentAddEditBinding? = null
     private val binding get() = _binding!!
@@ -79,7 +83,7 @@ class AddEditFragment : Fragment() {
 
                     is AddEditViewModel.AddEditTaskEvent.NavigateBackWithResult -> {
                         binding.taskField.clearFocus()
-                        setFragmentResult("add_edit_request", bundleOf("message" to event.message))
+                        setFragmentResult(RESULT_REQUEST_KEY, bundleOf(MESSAGE_EXTRA to event.message))
                         findNavController().popBackStack()
                         null
                     }
