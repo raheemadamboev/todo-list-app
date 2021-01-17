@@ -1,6 +1,5 @@
 package xyz.teamgravity.todolist.fragment.dialog
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
