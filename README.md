@@ -21,7 +21,6 @@ Many say activity and fragment only should be responsible for updating UI and it
 - Kotlin Coroutines
 - Room
 - Jetpack DataStore Preferences
-- Jetpack Paging 3
 - ViewBinding
 - Flow
 - StateFlow
